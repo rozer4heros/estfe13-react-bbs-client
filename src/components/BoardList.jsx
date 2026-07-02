@@ -5,6 +5,8 @@ import Table from "react-bootstrap/Table";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 
+import Board from "./Board";
+
 function BoardList({}) {
   const [list, setList] = useState([]);
 
@@ -13,6 +15,7 @@ function BoardList({}) {
       .get("http://localhost:3000/list", {})
       .then((response) => {
         console.log(response.data);
+        setList(response.data);
       })
       .catch((error) => {
         console.error(error);
@@ -20,7 +23,7 @@ function BoardList({}) {
       .finally(() => {
         console.log("Request completed");
       });
-  }, [list]);
+  }, []);
 
   return (
     <>
@@ -35,15 +38,9 @@ function BoardList({}) {
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>
-              <Form.Check />
-            </td>
-            <td>1</td>
-            <td>Come here, Ib</td>
-            <td>Mary Guertena</td>
-            <td>1972.11.21</td>
-          </tr>
+          {list.map((item) => (
+            <Board key={item.id} data={item} />
+          ))}
         </tbody>
       </Table>
       <div className="d-flex gap-1 justify-content-end">
