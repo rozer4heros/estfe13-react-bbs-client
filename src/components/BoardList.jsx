@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import axios from "axios";
 
 import Table from "react-bootstrap/Table";
@@ -5,11 +6,12 @@ import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 
 function BoardList({}) {
-  const simpleTest = () => {
+  const [list, setList] = useState([]);
+
+  useEffect(() => {
     axios
-      .get("http://localhost:3000", {})
+      .get("http://localhost:3000/list", {})
       .then((response) => {
-        console.log(response);
         console.log(response.data);
       })
       .catch((error) => {
@@ -18,7 +20,7 @@ function BoardList({}) {
       .finally(() => {
         console.log("Request completed");
       });
-  };
+  }, [list]);
 
   return (
     <>
@@ -42,25 +44,10 @@ function BoardList({}) {
             <td>Mary Guertena</td>
             <td>1972.11.21</td>
           </tr>
-          {/*
-          <tr>
-            <td>2</td>
-            <td>Jacob</td>
-            <td>Thornton</td>
-            <td>@fat</td>
-          </tr>
-          <tr>
-            <td>3</td>
-            <td colSpan={2}>Larry the Bird</td>
-            <td>@twitter</td>
-          </tr>
-          */}
         </tbody>
       </Table>
       <div className="d-flex gap-1 justify-content-end">
-        <Button variant="primary" onClick={simpleTest}>
-          입력
-        </Button>
+        <Button variant="primary">입력</Button>
         <Button variant="secondary">수정</Button>
         <Button variant="danger">삭제</Button>
       </div>
