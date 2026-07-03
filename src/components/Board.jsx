@@ -1,3 +1,5 @@
+import { Link } from "react-router";
+
 import Form from "react-bootstrap/Form";
 
 function Board({ data }) {
@@ -8,7 +10,9 @@ function Board({ data }) {
         <Form.Check />
       </td>
       <td>{data.id}</td>
-      <td>{data.title}</td>
+      <td>
+        <Link to={`/view/${data.id}`}>{data.title}</Link>
+      </td>
       <td>{data.writer}</td>
       <td>{data.date}</td>
     </tr>
