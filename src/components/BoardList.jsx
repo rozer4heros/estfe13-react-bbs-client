@@ -13,7 +13,7 @@ function BoardList({}) {
 
   useEffect(() => {
     axios
-      .get("http://localhost:3000/list", {})
+      .get("http://localhost:3000/list")
       .then((response) => {
         console.log(response.data);
         setList(response.data);
@@ -36,7 +36,7 @@ function BoardList({}) {
           </tr>
         </thead>
         <tbody>
-          {list.length <= 0 ? (
+          {list.length === 0 ? (
             <tr>
               <td colSpan={5}>글이 없습니다.</td>
             </tr>
@@ -49,7 +49,6 @@ function BoardList({}) {
         <Link to="/write" className="btn btn-primary">
           입력
         </Link>
-        <Button variant="secondary">수정</Button>
         <Button variant="danger">삭제</Button>
       </div>
     </>
