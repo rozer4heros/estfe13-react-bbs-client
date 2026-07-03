@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { Link } from "react-router";
 
 import Table from "react-bootstrap/Table";
 import Button from "react-bootstrap/Button";
@@ -19,9 +20,6 @@ function BoardList({}) {
       })
       .catch((error) => {
         console.error(error);
-      })
-      .finally(() => {
-        console.log("Request completed");
       });
   }, []);
 
@@ -44,7 +42,9 @@ function BoardList({}) {
         </tbody>
       </Table>
       <div className="d-flex gap-1 justify-content-end">
-        <Button variant="primary">입력</Button>
+        <Link to="/write" className="btn btn-primary">
+          입력
+        </Link>
         <Button variant="secondary">수정</Button>
         <Button variant="danger">삭제</Button>
       </div>
