@@ -36,9 +36,13 @@ function BoardList({}) {
           </tr>
         </thead>
         <tbody>
-          {list.map((item) => (
-            <Board key={item.id} data={item} />
-          ))}
+          {list.length <= 0 ? (
+            <tr>
+              <td colSpan={5}>글이 없습니다.</td>
+            </tr>
+          ) : (
+            list.map((item) => <Board key={item.id} data={item} />)
+          )}
         </tbody>
       </Table>
       <div className="d-flex gap-1 justify-content-end">
