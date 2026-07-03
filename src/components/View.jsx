@@ -4,7 +4,7 @@ import { Link, useParams } from "react-router";
 
 import Button from "react-bootstrap/Button";
 
-function View({ data }) {
+function View({ handleModify }) {
   const [isError, setIsError] = useState(false);
   const [content, setContent] = useState({
     writer: "",
@@ -37,6 +37,10 @@ function View({ data }) {
       });
   }, []);
 
+  const handleClick = () => {
+    handleModify(id);
+  };
+
   return (
     <>
       {isError ? (
@@ -60,7 +64,9 @@ function View({ data }) {
             <Link to="/" className="btn btn-primary">
               홈
             </Link>
-            <Button variant="secondary">수정</Button>
+            <Button variant="secondary" onClick={handleClick}>
+              수정
+            </Button>
             <Button variant="danger">삭제</Button>
           </div>
         </>
