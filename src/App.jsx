@@ -16,13 +16,20 @@ function App() {
     setIsModifyMode(true);
     navigate("/write");
   };
+  const handleCancel = () => {
+    setBoardId(0);
+    setIsModifyMode(false);
+  };
 
   return (
     <div className="container p-5">
       <h1>React Simple BBS</h1>
       <Routes>
         <Route index element={<BoardList />} />
-        <Route path="/write" element={<Write isModifyMode={isModifyMode} boardId={boardId} />} />
+        <Route
+          path="/write"
+          element={<Write isModifyMode={isModifyMode} boardId={boardId} handleCancel={handleCancel} />}
+        />
         <Route path="/view/:id" element={<View handleModify={handleModify} />} />
       </Routes>
     </div>

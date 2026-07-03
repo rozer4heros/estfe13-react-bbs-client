@@ -21,6 +21,7 @@ function View({ handleModify }) {
         console.log(response.data);
         if (!response.data || response.data.length === 0) {
           setIsError(true);
+          console.warn("해당하는 데이터를 찾을 수 없습니다.");
           return;
         }
         const data = response.data[0];
