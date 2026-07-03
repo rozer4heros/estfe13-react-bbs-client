@@ -18,7 +18,6 @@ function Write({ isModifyMode, boardId, handleCancel }) {
       axios
         .get(`http://localhost:3000/view?id=${boardId}`)
         .then((response) => {
-          console.log(response.data);
           if (!response.data || response.data.length === 0) {
             setIsError(true);
             return;

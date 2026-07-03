@@ -19,7 +19,6 @@ function View({ handleModify }) {
     axios
       .get(`http://localhost:3000/view?id=${id}`)
       .then((response) => {
-        console.log(response.data);
         if (!response.data || response.data.length === 0) {
           setIsError(true);
           console.warn("해당하는 데이터를 찾을 수 없습니다.");
@@ -49,7 +48,6 @@ function View({ handleModify }) {
           id: id,
         })
         .then((response) => {
-          console.log(response);
           navigate("/");
         })
         .catch((error) => {

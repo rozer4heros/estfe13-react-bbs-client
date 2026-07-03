@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import axios from "axios";
 import { Link } from "react-router";
 
@@ -10,18 +10,47 @@ import Board from "./Board";
 
 function BoardList({}) {
   const [list, setList] = useState([]);
+  const [checkList, setCheckList] = useState([]);
 
-  useEffect(() => {
+  const getList = useCallback(() => {
     axios
       .get("http://localhost:3000/list")
       .then((response) => {
-        console.log(response.data);
         setList(response.data);
       })
       .catch((error) => {
         console.error(error);
       });
   }, []);
+
+  useEffect(() => {
+    getList();
+  }, [getList]);
+
+  const onCheckBoxChange = (checked, id) => {
+    setCheckList((prev) => (checked ? [...prev, id] : prev.filter((_id) => _id !== id)));
+  };
+
+  const handleDelete = () => {
+    if (checkList.length === 0) {
+      alert("삭제할 게시물을 선택해주세요.");
+      return;
+    }
+
+    const boardIdList = checkList.join();
+
+    axios
+      .post("http://localhost:3000/delete", {
+        id: boardIdList,
+      })
+      .then((response) => {
+        getList();
+        setCheckList([]);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
 
   return (
     <>
@@ -41,7 +70,7 @@ function BoardList({}) {
               <td colSpan={5}>글이 없습니다.</td>
             </tr>
           ) : (
-            list.map((item) => <Board key={item.id} data={item} />)
+            list.map((item) => <Board key={item.id} data={item} onCheckBoxChange={onCheckBoxChange} />)
           )}
         </tbody>
       </Table>
@@ -49,7 +78,9 @@ function BoardList({}) {
         <Link to="/write" className="btn btn-primary">
           입력
         </Link>
-        <Button variant="danger">삭제</Button>
+        <Button variant="danger" onClick={handleDelete}>
+          삭제
+        </Button>
       </div>
     </>
   );
