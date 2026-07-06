@@ -44,16 +44,9 @@ function Write({ isModifyMode, boardId, handleCancel }) {
     if (!validatedData) return;
 
     const formData = createFormData(validatedData);
-
+    formData.append("id", boardId);
     axios
-      .post(
-        "http://localhost:3000/update",
-        {
-          ...formData,
-          id: boardId,
-        },
-        { headers: { "Content-Type": "multipart/form-data" } },
-      )
+      .post("http://localhost:3000/update", ...formData, { headers: { "Content-Type": "multipart/form-data" } })
       .then((response) => {
         handleCancel();
         navigate(`/view/${boardId}`);
@@ -109,7 +102,7 @@ function Write({ isModifyMode, boardId, handleCancel }) {
     formData.append("writer", validatedData.name);
     formData.append("title", validatedData.title);
     formData.append("content", validatedData.content);
-    if (content.image) formData.append("image", validatedData.content);
+    if (content.image) formData.append("image", content.image);
     return formData;
   }
 
