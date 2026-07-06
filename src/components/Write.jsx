@@ -10,6 +10,7 @@ function Write({ isModifyMode, boardId, handleCancel }) {
     writer: "",
     title: "",
     content: "",
+    image: null,
   });
   const navigate = useNavigate();
 
@@ -39,14 +40,20 @@ function Write({ isModifyMode, boardId, handleCancel }) {
   const onUpdate = (e) => {
     e.preventDefault();
 
-    const formData = validateForm(e);
-    if (!formData) return;
+    const validatedData = validateForm(e);
+    if (!validatedData) return;
+
+    const formData = createFormData(validatedData);
 
     axios
-      .post("http://localhost:3000/update", {
-        ...formData,
-        id: boardId,
-      })
+      .post(
+        "http://localhost:3000/update",
+        {
+          ...formData,
+          id: boardId,
+        },
+        { headers: { "Content-Type": "multipart/form-data" } },
+      )
       .then((response) => {
         handleCancel();
         navigate(`/view/${boardId}`);
@@ -58,11 +65,13 @@ function Write({ isModifyMode, boardId, handleCancel }) {
   const onWrite = (e) => {
     e.preventDefault();
 
-    const formData = validateForm(e);
-    if (!formData) return;
+    const validatedData = validateForm(e);
+    if (!validatedData) return;
+
+    const formData = createFormData(validatedData);
 
     axios
-      .post("http://localhost:3000/write", formData)
+      .post("http://localhost:3000/write", formData, { headers: { "Content-Type": "multipart/form-data" } })
       .then((response) => {
         navigate("/");
       })
@@ -95,6 +104,21 @@ function Write({ isModifyMode, boardId, handleCancel }) {
     }
     return { name, title, content };
   }
+  function createFormData(validatedData) {
+    const formData = new FormData();
+    formData.append("writer", validatedData.name);
+    formData.append("title", validatedData.title);
+    formData.append("content", validatedData.content);
+    if (content.image) formData.append("image", validatedData.content);
+    return formData;
+  }
+
+  const handleImageChange = (e) => {
+    setContent((prev) => ({
+      ...prev,
+      image: e.target.files[0],
+    }));
+  };
 
   return (
     <>
@@ -123,6 +147,10 @@ function Write({ isModifyMode, boardId, handleCancel }) {
         <Form.Group className="mb-3" controlId="content">
           <Form.Label>내용</Form.Label>
           <Form.Control as="textarea" name="content" defaultValue={content.content} rows={3} required />
+        </Form.Group>
+        <Form.Group controlId="formFile" className="mb-3">
+          <Form.Label>이미지 첨부</Form.Label>
+          <Form.Control type="file" accept="image/*" onChange={handleImageChange} />
         </Form.Group>
         <div className="d-flex gap-1 justify-content-end">
           <Button type="submit" variant="primary">
