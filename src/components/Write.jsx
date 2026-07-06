@@ -13,6 +13,8 @@ function Write({ isModifyMode, boardId, handleCancel }) {
     image: null,
   });
   const navigate = useNavigate();
+  // 기존 이미지 삭제 플래그
+  const [removeImg, setRemoveImg] = useState(false);
 
   useEffect(() => {
     if (isModifyMode && boardId) {
@@ -28,6 +30,9 @@ function Write({ isModifyMode, boardId, handleCancel }) {
             writer: data.writer,
             title: data.title,
             content: data.content,
+            date: data.date,
+            image_path: data.image_path || "", // 기존 이미지
+            image: null, // 새 이미지
           });
         })
         .catch((error) => {
@@ -103,7 +108,12 @@ function Write({ isModifyMode, boardId, handleCancel }) {
     formData.append("writer", validatedData.name);
     formData.append("title", validatedData.title);
     formData.append("content", validatedData.content);
+
+    // 새 이미지
     if (content.image) formData.append("image", content.image);
+
+    if (removeImg) formData.append("remove_img", "1");
+
     return formData;
   }
 
@@ -146,6 +156,23 @@ function Write({ isModifyMode, boardId, handleCancel }) {
           <Form.Label>이미지 첨부</Form.Label>
           <Form.Control type="file" accept="image/*" onChange={handleImageChange} />
         </Form.Group>
+        {content.image_path && (
+          <div>
+            <img
+              src={`http://localhost:3000/${content.image_path}`}
+              alt={content.title}
+              style={{ maxWidth: "200px", maxHeight: "200px" }}
+            ></img>
+            <Form.Check
+              type="checkbox"
+              id="default-check"
+              label="기존 이미지 제거"
+              onChange={(e) => {
+                setRemoveImg(e.target.checked);
+              }}
+            />
+          </div>
+        )}
         <div className="d-flex gap-1 justify-content-end">
           <Button type="submit" variant="primary">
             {isModifyMode ? "수정" : "입력"}
