@@ -14,7 +14,7 @@ function Write({ isModifyMode, boardId, handleCancel }) {
   });
   const navigate = useNavigate();
   // 기존 이미지 삭제 플래그
-  const [removeImg, setRemoveImg] = useState(false);
+  const [removeImage, setRemoveImage] = useState(false);
 
   useEffect(() => {
     if (isModifyMode && boardId) {
@@ -48,8 +48,11 @@ function Write({ isModifyMode, boardId, handleCancel }) {
     const validatedData = validateForm(e);
     if (!validatedData) return;
 
-    const formData = createFormData(validatedData);
-    formData.append("id", boardId);
+    const formData = createFormData(validatedData, boardId);
+
+    for (const [key, value] of formData.entries()) {
+      console.log(key, ": ", value);
+    }
 
     axios
       .post("http://localhost:3000/update", formData, { headers: { "Content-Type": "multipart/form-data" } })
@@ -84,11 +87,11 @@ function Write({ isModifyMode, boardId, handleCancel }) {
   };
 
   function validateForm(e) {
-    const name = e.target.writer.value.trim();
+    const writer = e.target.writer.value.trim();
     const title = e.target.title.value.trim();
     const content = e.target.content.value.trim();
 
-    if (!name) {
+    if (!writer) {
       alert("글쓴이를 입력하세요");
       // 글쓴이에 포커스 걸기
       return null;
@@ -101,18 +104,20 @@ function Write({ isModifyMode, boardId, handleCancel }) {
       // 내용에 포커스 걸기
       return null;
     }
-    return { name, title, content };
+    return { writer, title, content };
   }
-  function createFormData(validatedData) {
+  function createFormData(validatedData, id = null) {
     const formData = new FormData();
-    formData.append("writer", validatedData.name);
+    formData.append("writer", validatedData.writer);
     formData.append("title", validatedData.title);
     formData.append("content", validatedData.content);
+
+    if (id) formData.append("id", id);
 
     // 새 이미지
     if (content.image) formData.append("image", content.image);
 
-    if (removeImg) formData.append("remove_img", "1");
+    if (removeImage) formData.append("remove_image", "1");
 
     return formData;
   }
@@ -168,7 +173,7 @@ function Write({ isModifyMode, boardId, handleCancel }) {
               id="default-check"
               label="기존 이미지 제거"
               onChange={(e) => {
-                setRemoveImg(e.target.checked);
+                setRemoveImage(e.target.checked);
               }}
             />
           </div>
