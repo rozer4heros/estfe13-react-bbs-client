@@ -11,6 +11,7 @@ function View({ handleModify }) {
     title: "",
     content: "",
     date: "",
+    image: null,
   });
   const { id } = useParams();
   const navigate = useNavigate();
@@ -30,6 +31,7 @@ function View({ handleModify }) {
           title: data.title,
           content: data.content,
           date: data.date,
+          image: data.image_path,
         });
       })
       .catch((error) => {
@@ -74,6 +76,15 @@ function View({ handleModify }) {
           </div>
           <hr />
           <p>{content.content}</p>
+          {content.image && (
+            <div>
+              <img
+                src={`http://localhost:3000/${content.image}`}
+                alt={content.title}
+                style={{ maxWidth: "100%" }}
+              ></img>
+            </div>
+          )}
           <hr />
           <div className="d-flex gap-1 justify-content-end">
             <Link to="/" className="btn btn-primary">
