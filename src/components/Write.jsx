@@ -45,8 +45,9 @@ function Write({ isModifyMode, boardId, handleCancel }) {
 
     const formData = createFormData(validatedData);
     formData.append("id", boardId);
+
     axios
-      .post("http://localhost:3000/update", ...formData, { headers: { "Content-Type": "multipart/form-data" } })
+      .post("http://localhost:3000/update", formData, { headers: { "Content-Type": "multipart/form-data" } })
       .then((response) => {
         handleCancel();
         navigate(`/view/${boardId}`);
