@@ -4,6 +4,8 @@ import { Link, useNavigate, useParams } from "react-router";
 
 import Button from "react-bootstrap/Button";
 
+const API_URL = import.meta.env.VITE_API_URL;
+
 function View({ handleModify }) {
   const [isError, setIsError] = useState(false);
   const [content, setContent] = useState({
@@ -18,7 +20,7 @@ function View({ handleModify }) {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:3000/view?id=${id}`)
+      .get(`${API_URL}/view?id=${id}`)
       .then((response) => {
         if (!response.data || response.data.length === 0) {
           setIsError(true);
@@ -46,7 +48,7 @@ function View({ handleModify }) {
   const handleDelete = () => {
     if (window.confirm("정말로 삭제하시겠습니까?")) {
       axios
-        .post(`http://localhost:3000/delete`, {
+        .post(`${API_URL}/delete`, {
           id: id,
         })
         .then((response) => {
@@ -78,11 +80,7 @@ function View({ handleModify }) {
           <p>{content.content}</p>
           {content.image && (
             <div>
-              <img
-                src={`http://localhost:3000/${content.image}`}
-                alt={content.title}
-                style={{ maxWidth: "100%" }}
-              ></img>
+              <img src={`${API_URL}/${content.image}`} alt={content.title} style={{ maxWidth: "100%" }}></img>
             </div>
           )}
           <hr />

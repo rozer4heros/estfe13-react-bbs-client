@@ -8,13 +8,15 @@ import Form from "react-bootstrap/Form";
 
 import Board from "./Board";
 
+const API_URL = import.meta.env.VITE_API_URL;
+
 function BoardList({}) {
   const [list, setList] = useState([]);
   const [checkList, setCheckList] = useState([]);
 
   const getList = useCallback(() => {
     axios
-      .get("http://localhost:3000/list")
+      .get(`${API_URL}/list`)
       .then((response) => {
         setList(response.data);
       })
@@ -41,7 +43,7 @@ function BoardList({}) {
       const boardIdList = checkList.join();
 
       axios
-        .post("http://localhost:3000/deleteselect", {
+        .post(`${API_URL}/deleteselect`, {
           boardIdList,
         })
         .then((response) => {
