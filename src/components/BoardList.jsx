@@ -37,19 +37,21 @@ function BoardList({}) {
       return;
     }
 
-    const boardIdList = checkList.join();
+    if (window.confirm(`정말로 ${checkList.length}개의 게시물을 전부 삭제하시겠습니까?`)) {
+      const boardIdList = checkList.join();
 
-    axios
-      .post("http://localhost:3000/delete", {
-        id: boardIdList,
-      })
-      .then((response) => {
-        getList();
-        setCheckList([]);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+      axios
+        .post("http://localhost:3000/deleteselect", {
+          boardIdList,
+        })
+        .then((response) => {
+          getList();
+          setCheckList([]);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    }
   };
 
   return (
