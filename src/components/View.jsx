@@ -80,7 +80,7 @@ function View({ handleModify }) {
           <p>{content.content}</p>
           {content.image && (
             <div>
-              <img src={`${API_URL}/${content.image}`} alt={content.title} style={{ maxWidth: "100%" }}></img>
+              <img src={`/${content.image}`} alt={content.title} style={{ maxWidth: "100%" }}></img>
             </div>
           )}
           <hr />
